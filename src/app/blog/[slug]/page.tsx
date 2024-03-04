@@ -1,7 +1,15 @@
 import Image from "next/image";
 import styles from "./singlePost.module.css";
+import { ReactNode } from "react";
 
-const SinglePostPage = () => {
+interface Props {
+  params: {
+    [key: string]: string;
+  };
+}
+
+const SinglePostPage = ({ params }: Props) => {
+  console.log(params);
   return (
     <div className={styles.container}>
       <div className={styles.imgContainer}>

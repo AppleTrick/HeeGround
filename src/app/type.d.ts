@@ -4,7 +4,8 @@ interface MainProps {
 
 interface PostType {
   userId: number;
-  id: number;
+  slug: string;
   title: string;
   body: string;
+  img?: string;
 }

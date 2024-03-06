@@ -32,10 +32,11 @@ const BlogPage = async () => {
 
   // FETCH DATA WITHOUT AN API
   const posts = await getposts();
+
   return (
     <div className={styles.container}>
       {posts.map((post: PostType) => (
-        <div className={styles.post} key={post.id}>
+        <div className={styles.post} key={post.slug}>
           <PostCard post={post} />
         </div>
       ))}

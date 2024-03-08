@@ -10,21 +10,33 @@ interface Props {
   };
 }
 
+export const generateMetadata = async ({ params }: Props) => {
+  const { slug } = params;
+  const post = await getPost(slug);
+
+  return {
+    title: post.title,
+    description: post.des,
+  };
+};
+
 const SinglePostPage = async ({ params }: Props) => {
   const { slug } = params;
 
   const post = await getPost(slug);
+
   console.log(post);
 
   return (
     <div className={styles.container}>
-      <div className={styles.imgContainer}>
-        <Image className={styles.img} src={post.img} alt="" fill />
-      </div>
+      {post.img && (
+        <div className={styles.imgContainer}>
+          <Image className={styles.img} src={post.img} alt="" fill />
+        </div>
+      )}
       <div className={styles.textContainer}>
         <h1 className={styles.title}>{post?.title}</h1>
         <div className={styles.detail}>
-          <Image className={styles.avatar} src="https://images.pexels.com/photos/18965342/pexels-photo-18965342.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" width={50} height={50} />
           {post && (
             <Suspense fallback={<div>Loading...</div>}>
               <PostUser userId={post.userId} />

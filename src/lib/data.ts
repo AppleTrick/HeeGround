@@ -1,20 +1,6 @@
 import { Post, User } from "./models";
 import { connectToDb } from "./utils";
-
-// TEMPORARY DATA
-// const users = [
-//   { id: 1, name: "park1" },
-//   { id: 2, name: "park2" },
-//   { id: 3, name: "park3" },
-//   { id: 4, name: "park4" },
-// ];
-
-// const posts = [
-//   { id: 1, title: "Post 1 ", body: "1234", userId: 1 },
-//   { id: 2, title: "Post 2 ", body: "1234", userId: 1 },
-//   { id: 3, title: "Post 3 ", body: "1234", userId: 2 },
-//   { id: 4, title: "Post 4 ", body: "1234", userId: 2 },
-// ];
+import { unstable_noStore as noStore } from "next/cache";
 
 export const getposts = async () => {
   try {
@@ -39,6 +25,7 @@ export const getPost = async (slug: string) => {
 };
 
 export const getUser = async (id: string) => {
+  noStore(); // 캐쉬를 더이상 하지 않음
   try {
     connectToDb();
     const user = await User.findById(id);
@@ -59,3 +46,18 @@ export const getUsers = async () => {
     throw new Error("Failed to fetch users!");
   }
 };
+
+// TEMPORARY DATA
+// const users = [
+//   { id: 1, name: "park1" },
+//   { id: 2, name: "park2" },
+//   { id: 3, name: "park3" },
+//   { id: 4, name: "park4" },
+// ];
+
+// const posts = [
+//   { id: 1, title: "Post 1 ", body: "1234", userId: 1 },
+//   { id: 2, title: "Post 2 ", body: "1234", userId: 1 },
+//   { id: 3, title: "Post 3 ", body: "1234", userId: 2 },
+//   { id: 4, title: "Post 4 ", body: "1234", userId: 2 },
+// ];

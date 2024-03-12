@@ -1,17 +1,19 @@
-import { sayHello } from "@/lib/action";
+import { addPost, deletePost } from "@/lib/action";
 
 const ServerActionTestPage = () => {
-  const actionComponent = async () => {
-    "use server";
-    console.log("서버에서 작동");
-  };
-
   return (
     <div>
-      <form action={sayHello}>
-        <button>Test me</button>
+      <form action={addPost}>
+        <input type="text" placeholder="title" name="title" />
+        <input type="text" placeholder="body" name="body" />
+        <input type="text" placeholder="slug" name="slug" />
+        <input type="text" placeholder="userId" name="userId" />
+        <button>Create</button>
       </form>
-      <button onClick={actionComponent}> 서버 작동</button>
+      <form action={deletePost}>
+        <input type="text" placeholder="postId" name="id" />
+        <button>Delete</button>
+      </form>
     </div>
   );
 };

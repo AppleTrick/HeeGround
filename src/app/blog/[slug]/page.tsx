@@ -10,6 +10,17 @@ interface Props {
   };
 }
 
+// FETCH DATA WITH AN API
+const getData = async (slug: any) => {
+  const res = await fetch(`http://localhost:3000/api/blog/${slug}`, { next: { revalidate: 3600 } });
+
+  if (!res.ok) {
+    throw new Error("somthing wrong");
+  }
+
+  return res.json();
+};
+
 export const generateMetadata = async ({ params }: Props) => {
   const { slug } = params;
   const post = await getPost(slug);
@@ -23,7 +34,11 @@ export const generateMetadata = async ({ params }: Props) => {
 const SinglePostPage = async ({ params }: Props) => {
   const { slug } = params;
 
-  const post = await getPost(slug);
+  // FETCH DATA WITH AN API
+  const post = await getData(slug);
+
+  // FETCH DATA WITHOUT AN API
+  // const post = await getPost(slug);
 
   console.log(post);
 

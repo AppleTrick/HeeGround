@@ -9,3 +9,7 @@ interface PostType {
   body: string;
   img?: string;
 }
+
+interface FormType {
+  [key: string]: any;
+}

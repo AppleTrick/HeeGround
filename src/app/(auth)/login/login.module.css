@@ -10,6 +10,13 @@
   padding: 50px;
   display: flex;
   flex-direction: column;
-  text-align: center gap 30px;
+  text-align: center;
+  gap: 30px;
   border-radius: 5px;
+}
+
+.github {
+  width: 100%;
+  padding: 20px;
+  cursor: pointer;
 }

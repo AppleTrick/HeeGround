@@ -7,6 +7,7 @@ import { Post, User } from "./models";
 import { connectToDb } from "./utils";
 import { signIn, signOut } from "./auth";
 import bcrypt from "bcrypt";
+import Error from "next/error";
 
 export const addPost = async (formData: any) => {
   // const title = formData.get("title");
@@ -27,11 +28,11 @@ export const addPost = async (formData: any) => {
     });
 
     await newPost.save();
-    console.log("save to DB");
+    console.log("디비에 저장 완료!");
     revalidatePath("/blog");
   } catch (error) {
     console.log(error);
-    return { error: "Something Error" };
+    return { error: "에러가 발생했습니다." };
   }
 };
 
@@ -43,11 +44,11 @@ export const deletePost = async (formData: any) => {
     connectToDb();
 
     await Post.findByIdAndDelete(id);
-    console.log("delete from DB");
+    console.log("포스트를 삭제합니다.");
     revalidatePath("/blog");
   } catch (error) {
     console.log(error);
-    return { error: "Something Error" };
+    return { error: "에러가 발생했습니다." };
   }
 };
 
@@ -61,23 +62,32 @@ export const handleLogout = async () => {
   await signOut();
 };
 
-export const register = async (formData: any) => {
+export const register = async (previousState: any, formData: any) => {
   const { username, email, password, img, passwordRepeat } = Object.fromEntries(formData);
 
   if (password !== passwordRepeat) {
-    return "패스워드가 일치 하지 않아요";
+    // return "패스워드가 일치 하지 않아요";
+    // throw new Error("패스워드가 일치하지 않습니다.");
+    return { error: "패스워드가 일치하지 않습니다." };
   }
 
   try {
     connectToDb();
 
     const user = await User.findOne({ username });
+    const sameEmail = await User.findOne({ email });
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     if (user) {
-      return "동일한 유저가 존재합니다.";
+      // return "동일한 유저가 존재합니다.";
+      return { error: "동일한 유저가 존재합니다." };
+    }
+
+    if (sameEmail) {
+      // return "동일한 유저가 존재합니다.";
+      return { error: "동일한 이메일이 존재합니다." };
     }
     const newUser = new User({
       username,
@@ -87,9 +97,25 @@ export const register = async (formData: any) => {
     });
 
     await newUser.save();
-    console.log("save to DB");
+    console.log("디비에 저장 완료!");
+
+    return { success: true };
   } catch (error) {
     console.log(error);
-    return { error: "Something Error" };
+    return { error: "에러가 발생했습니다." };
+  }
+};
+
+export const login = async (previousState: any, formData: any) => {
+  const { username, password } = Object.fromEntries(formData);
+
+  try {
+    await signIn("credentials", { username, password });
+  } catch (error: any) {
+    if (error.message.includes("CredentialsSignin")) {
+      return { error: "올바르지 않은 이름 이거나 패스워드 입니다." };
+    }
+    // return { error: "에러가 발생했습니다." };
+    throw error;
   }
 };

@@ -18,7 +18,7 @@ export const authConfig = {
 
     async session({ session, token }: { session: Session; token: JWT }): Promise<Session> {
       if (token) {
-        session.user.name = token.id;
+        session.user.userId = token.id;
         session.user.isAdmin = token.isAdmin;
       }
       return session;

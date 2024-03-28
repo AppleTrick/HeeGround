@@ -7,13 +7,8 @@ import { Post, User } from "./models";
 import { connectToDb } from "./utils";
 import { signIn, signOut } from "./auth";
 import bcrypt from "bcrypt";
-import Error from "next/error";
 
-export const addPost = async (formData: any) => {
-  // const title = formData.get("title");
-  // const desc = formData.get("body");
-  // const body = formData.get("slug");
-  // const userId = formData.get("userId");
+export const addPost = async (previousState: any, formData: any) => {
   const { title, body, slug, userId } = Object.fromEntries(formData);
 
   console.log(title, body, slug, userId);
@@ -30,9 +25,10 @@ export const addPost = async (formData: any) => {
     await newPost.save();
     console.log("디비에 저장 완료!");
     revalidatePath("/blog");
+    revalidatePath("/admin");
   } catch (error) {
     console.log(error);
-    return { error: "에러가 발생했습니다." };
+    return { error: "포스트를 추가할 수 없습니다." };
   }
 };
 
@@ -46,6 +42,48 @@ export const deletePost = async (formData: any) => {
     await Post.findByIdAndDelete(id);
     console.log("포스트를 삭제합니다.");
     revalidatePath("/blog");
+    revalidatePath("/admin");
+  } catch (error) {
+    console.log(error);
+    return { error: "에러가 발생했습니다." };
+  }
+};
+
+export const addUser = async (previousState: any, formData: any) => {
+  const { username, email, password, img, isAdmin } = Object.fromEntries(formData);
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  try {
+    connectToDb();
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      img,
+      isAdmin,
+    });
+
+    await newUser.save();
+    console.log("디비에 저장 완료!");
+    revalidatePath("/admin");
+  } catch (error) {
+    console.log(error);
+    return { error: "에러가 발생했습니다." };
+  }
+};
+
+export const deleteUser = async (formData: any) => {
+  const { id } = Object.fromEntries(formData);
+  console.log(id);
+
+  try {
+    connectToDb();
+    await Post.deleteMany({ userId: id });
+    await User.findByIdAndDelete(id);
+    console.log("유저를 삭제합니다.");
+    revalidatePath("/admin");
   } catch (error) {
     console.log(error);
     return { error: "에러가 발생했습니다." };

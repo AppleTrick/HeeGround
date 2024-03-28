@@ -19,7 +19,7 @@ const login = async (credentials: any) => {
     const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password);
 
     if (!isPasswordCorrect) {
-      throw new Error("잘못된 로그인 입니다.");
+      throw new Error("패스워드가 잘못 되었습니다.");
     }
 
     return user;
@@ -70,7 +70,7 @@ export const {
           return false;
         }
       }
-      console.log("잘진행됨");
+      console.log("잘 진행됨");
       return true;
     },
     ...authConfig.callbacks,

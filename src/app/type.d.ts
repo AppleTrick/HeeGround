@@ -8,6 +8,9 @@ interface PostType {
   title: string;
   body: string;
   img?: string;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+
 }
 
 interface FormType {

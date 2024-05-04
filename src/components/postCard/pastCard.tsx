@@ -1,12 +1,17 @@
 import Image from "next/image";
 import styles from "./postCard.module.css";
 import Link from "next/link";
+import { changeDate } from "@/lib/func/changeDate";
 
 interface PostProps {
   post?: PostType;
 }
 
 const PostCard = ({ post }: PostProps) => {
+
+  const date = changeDate(post?.updatedAt || post?.createdAt);
+
+
   return (
     <div className={styles.container}>
       <div className={styles.top}>
@@ -15,7 +20,7 @@ const PostCard = ({ post }: PostProps) => {
             <Image src={post.img} alt="" fill className={styles.img} />
           </div>
         )}
-        <span className={styles.date}>01.01.2024</span>
+        <span className={styles.date}>{date}</span>
       </div>
       <div className={styles.bottom}>
         <h1 className={styles.title}>{post?.title}</h1>

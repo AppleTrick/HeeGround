@@ -25,10 +25,13 @@ export const generateMetadata = async ({ params }: Props) => {
   const { slug } = params;
   const post = await getPost(slug);
 
-  return {
-    title: post.title,
-    description: post.des,
-  };
+  // generateMetadata 부분 수정하기
+
+  // console.log(post);
+  // return {
+  //   title: post.title,
+  //   description: post.des,
+  // };
 };
 
 const SinglePostPage = async ({ params }: Props) => {
@@ -36,11 +39,7 @@ const SinglePostPage = async ({ params }: Props) => {
 
   // FETCH DATA WITH AN API
   const post = await getData(slug);
-
-  // FETCH DATA WITHOUT AN API
-  // const post = await getPost(slug);
-
-  console.log(post);
+  // console.log(post)
 
   return (
     <div className={styles.container}>

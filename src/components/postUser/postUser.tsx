@@ -8,6 +8,8 @@ interface PostUserProps {
 
 const PostUser = async ({ userId }: PostUserProps) => {
   const user = await getUser(userId);
+
+  // console.log(user);
   return (
     <div className={styles.container}>
       <Image className={styles.avatar} src={user.img ? user.img : "/noavatar.png"} alt="" width={50} height={50} />

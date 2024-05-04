@@ -3,6 +3,7 @@ import styles from "./singlePost.module.css";
 import { Suspense, useEffect, useState } from "react";
 import PostUser from "@/components/postUser/postUser";
 import { getPost } from "@/lib/data";
+import { changeDate } from "@/lib/func/changeDate";
 
 interface Props {
   params: {
@@ -39,6 +40,10 @@ const SinglePostPage = async ({ params }: Props) => {
 
   // FETCH DATA WITH AN API
   const post = await getData(slug);
+
+  const date = changeDate(post?.updatedAt || post?.createdAt);
+
+
   // console.log(post)
 
   return (
@@ -57,8 +62,8 @@ const SinglePostPage = async ({ params }: Props) => {
             </Suspense>
           )}
           <div className={styles.detailText}>
-            <span className={styles.detailTitle}>Published</span>
-            <span className={styles.detailValue}>{post.createdAt.toString().slice(4, 16)}</span>
+            <span className={styles.detailTitle}>작성일</span>
+            <span className={styles.detailValue}>{date}</span>
           </div>
         </div>
         <div className={styles.content}>{post?.body}</div>
